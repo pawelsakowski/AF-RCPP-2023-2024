@@ -45,4 +45,9 @@ slides/*.md
 slides/*_cache
 slides/*_files
 README.html
+packages/*.zip
+packages/*.tar.gz
+packages/*/src/*.o
+packages/*/src/*.so
+
 
