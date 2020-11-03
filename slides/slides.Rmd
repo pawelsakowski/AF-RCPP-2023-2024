@@ -1,0 +1,640 @@
+---
+title: "Applied Finance"
+subtitle: "Path-dependent option pricing with Monte Carlo and the `Rcpp` package "
+author: "Paweł Sakowski"
+date: |
+ | academic year 2020/2021
+ | ![](img/logo.png)
+fontsize: 10pt
+output: 
+  beamer_presentation:
+    theme: "default"
+    colortheme: "dolphin"
+    #includes:
+    #  in_header: style_beamer.tex
+    toc: false
+    fig_caption: false
+    highlight: tango
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
+```
+
+```{r, echo = F, warning=F, message=FALSE}
+library(knitr)
+library(tidyverse)
+library(fOptions)
+library(tidyverse)
+```
+
+
+# Options
+
+In finance, an **option** is an agreement, which gives the holder a right for **buy** or **sell** a certaing underlying instrument for a given price (*exercise price*) at a given moment in futures (*expiry date*).
+
+# Underlying instruments
+
+* **commodity options** -- the underlying instrument is various commodities:
+    * precious metals (gold, silver, platinum),
+    * industrial commodities (cupper, steel)
+    * agricultural commodities (wheat, corn, livestock),
+
+* **financial options** -- the underlying is a financial instrument
+    * equity options (stock options) -- stocks of companies quoted on stock exchange,
+    * index options -- written on equity indices,
+    * currency options -- underlying is currency (exchange rate)
+    * interest rate options -- inderlying is a security: bond, bill,     
+    * futures options -- underlying is a futures contract written on other index/security/currency/commodity
+
+
+# Types of options
+
+We can distinguish two basic option types:
+
+* **CALL** option -- gives the holder right to **buy** a given amount of underlying instrument for a given price at the given moment in future
+
+* **PUT** option -- gives the holder right to **sell** a given amount of underlying instrument for a given price at the given moment in future
+
+
+# Option characteristics 
+
+* **exercise price** (**strike price**) -- price at which option is exercised, it is determined at the moment of option writing and remains constant
+się;
+
+* **option price** (**option premium**) -- price of the right which is acquired by the option holder (buyer), it is a market value of the option which is time varying
+
+* **underlying price** -- market value of the underlying instrument for which option is written
+
+* **time to maturity** (**time to expiration**, **expiry**) --  time after which option cannond be exercised and becomes void. 
+
+* **exercise dat**e – moment in time (or interval) when option can be exercised. We can distinguish two types: **American option** and **European option**. Holder of an American option can exercise it at any moment until exercise date. Holder of an European option can exercise only at exercise date.
+
+# Right vs. obligation
+
+* Contrary to futures contracts, option is **a right**, not an obligation. 
+
+* When holder wants to make use of that right, it means that the option is exercised (executed). 
+
+* Option is a contract where there are to participants: 
+    * **Holder** of the option, who poseses the right to exercise the call/put option. Hence he can buy/sell the underlying instrument for the given strike price at a given moment in future. Holder takes long position in option contract.
+    * **Writer** of the option, who poseses the obligation to exercise the call/put option. Hence for call option he has to sell the underlying instrument, and for put option he has to buy underlying instrument (for the given strike price at a given moment in future). Holder takes short position in option contract.
+    
+
+# Four basic payoff profiles
+
+* Hence, we can distinguish four basic positions in option contracts:
+
+    * **Long Call** -- long position in call option
+    * **Long Put** -- long position in put option
+    * **Short Call** -- short position in call option
+    * **Short Put** -- short position in put option
+
+* Decision, whether to exercise the option is based on comparison of the strike price with current market price of underlying instrument.
+
+* Holder of the call option will make use of that right if the current market price of underlying instrument $(S)$ is higher than the strike price $(X)$. 
+
+* Holder of the put option will make use of that right if the current market price of underlying instrument $(S)$ is less than the strike price $(X)$. 
+
+
+# Four basic payoff profiles
+
+To illustrate the payoff profiles, we take (arbitrarily) following assumptions:
+
+```{r}
+X     <- 110  # strike price
+Time  <- 0.5  # time to maturity
+r     <- 0.06 # risk-free rate
+q     <- 0    # divident rate
+sigma <- 0.2  # volatility
+b     <- r - q
+```
+
+Price of the European call is:
+```{r}
+library(fOptions)
+(price <- GBSOption(TypeFlag = "c", S = 110, 
+                    X = X, Time = Time, r = r,
+                    b = b, sigma = sigma)@price)
+```
+(see next slides for the Black-Scholes formula)
+
+# Four basic payoff profiles
+
+We will use the following code:
+\small
+```{r, eval = F}
+library(tidyverse); library(ggthemes)
+S <- seq(90, 140, 1)
+longCallPayoffs <- sapply(S, function(S) max(S - X, 0))
+data.frame(x = S, y = longCallPayoffs - price) %>%
+  ggplot(aes(x = x, y = y)) + 
+  geom_line(size = 1, col = "red") +
+  ylim(-10, 20) + theme_minimal() +
+  labs(subtitle = paste0("Black-Scholes premium, X = ", X,
+                         ", ttm = ", Time,
+                         ", r = ", r,
+                         ", q = ", q,
+                         ", sigma = ", sigma),
+       y = "payoffs", 
+       x = "underlying price at maturity date", 
+       title = "payoff profile for long European call option", 
+       caption = "Source: own calculations") +
+  geom_hline(yintercept = 0, linetype = "solid", 
+             color = "black", size = 0.25) 
+```
+
+# Long Call 
+
+```{r, echo = F, warning=F}
+library(tidyverse); library(ggthemes)
+S <- seq(90, 140, 1)
+longCallPayoffs <- sapply(S, function(S) max(S - X, 0))
+data.frame(x = S, y = longCallPayoffs - price) %>%
+  ggplot(aes(x = x, y = y)) + 
+  geom_line(size = 1, col = "red") +
+  ylim(-10, 20) + theme_minimal() +
+  labs(subtitle = paste0("Black-Scholes premium, X = ", X,
+                         ", ttm = ", Time,
+                         ", r = ", r,
+                         ", q = ", q,
+                         ", sigma = ", sigma),
+       y = "payoffs", 
+       x = "underlying price at maturity date", 
+       title = "payoff profile for long European call option", 
+       caption = "Source: own calculations") +
+  geom_hline(yintercept = 0, linetype = "solid", 
+             color = "black", size = 0.25) 
+```
+
+
+# Short Call 
+
+```{r, echo = F, warning=F}
+library(tidyverse); library(ggthemes)
+data.frame(x = S, y = price - longCallPayoffs) %>%
+  ggplot(aes(x = x, y = y)) + 
+  geom_line(size = 1, col = "red") +
+  ylim(-20, 10) + theme_minimal() +
+  labs(subtitle = paste0("Black-Scholes premium, X = ", X,
+                         ", ttm = ", Time,
+                         ", r = ", r,
+                         ", q = ", q,
+                         ", sigma = ", sigma),
+       y = "payoffs", 
+       x = "underlying price at maturity date", 
+       title = "payoff profile for short European call option", 
+       caption = "Source: own calculations") +
+  geom_hline(yintercept = 0, linetype = "solid", 
+             color = "black", size = 0.25) 
+```
+
+
+# Long Put 
+
+```{r, echo = F, warning=F}
+library(tidyverse); library(ggthemes)
+S <- seq(80, 130, 1)
+longPutPayoffs <- sapply(S, function(S) max(X - S, 0))
+data.frame(x = S, y = longPutPayoffs - price) %>%
+  ggplot(aes(x = x, y = y)) + 
+  geom_line(size = 1, col = "red") +
+  ylim(-10, 20) + theme_minimal() +
+  labs(subtitle = paste0("Black-Scholes premium, X = ", X,
+                         ", ttm = ", Time,
+                         ", r = ", r,
+                         ", q = ", q,
+                         ", sigma = ", sigma),
+       y = "payoffs", 
+       x = "underlying price at maturity date", 
+       title = "payoff profile for long European put option", 
+       caption = "Source: own calculations") +
+  geom_hline(yintercept = 0, linetype = "solid", 
+             color = "black", size = 0.25) 
+```
+
+
+# Short Put 
+
+```{r, echo = F, warning=F}
+library(tidyverse); library(ggthemes)
+data.frame(x = S, y = price - longPutPayoffs) %>%
+  ggplot(aes(x = x, y = y)) + 
+  geom_line(size = 1, col = "red") +
+  ylim(-20, 10) + theme_minimal() +
+  labs(subtitle = paste0("Black-Scholes premium, X = ", X,
+                         ", ttm = ", Time,
+                         ", r = ", r,
+                         ", q = ", q,
+                         ", sigma = ", sigma),
+       y = "payoffs", 
+       x = "underlying price at maturity date", 
+       title = "payoff profile for short European put option", 
+       caption = "Source: own calculations") +
+  geom_hline(yintercept = 0, linetype = "solid", 
+             color = "black", size = 0.25) 
+```
+
+
+
+# Exercising the option contract
+
+There could be three scenarios when taking decision whether to exercise the option or not:
+
+* option is **in-the-money**, if it is worth exercising it. For a call option it means that $S > K$, while for a put option $S < K$
+
+* option is **out-of-the-money**, if it is worth exercising it. For a call option it means that $S < K$, while for a put option $S > K$
+
+* option is **at-the-money**, if the strike price is equal to current market price of underlying: $S = K$ 
+
+
+# Value of the option
+
+Value of the option can be decomposed into to parts:
+
+* **intrinsic value** -- is positive when option is **in-the-money**. If the option is at-the-money or out-of-the-money then its intrinsic value is zero. Generally, for call option instrinsic value is defined as $\max(S - K, 0)$, while for the put option $\max(K - S, 0)$.
+
+* **time value** -- is positive since price of underlying instrument changes over time. Time value converges to zero until option maturity.
+
+Hence, we can write:
+
+* value of the option = intrinsic value + time value 
+
+
+# Properties of option contract
+
+For a call option:
+
+* Option value is non-negative, as the option itself is a right, rather than obligation. The holder of the option will make use of that right only if it makes profit for him.
+
+* Option value cannot be lower than its intrinsic value -- otherwise risk-free arbitrage could be posible.
+
+* Option value is at least equal to (absolute) difference between its strike price and current price of underlying instrument.
+
+* Value of American option is not less than value of European option as the American option gives the holder the same rights as European plus additionally the right to exercise the option at any moment until option maturity.
+
+# Factors influencing option premium #1
+
+1. **strike price** -- influences negetively call option value, positively put option value.
+
+2. **underlying price** -- its increase results in higher value of call option and lower value of put option, while its decrease results in lower value of call option and higher value of put option.
+
+3. **time to maturity** -- influences positively both call and put option values. The longer time to maturity, the higher probability that the option becomes in-the-money.
+
+# Factors influencing option premium #2
+
+4. **volatility of underlying prices** -- influences positively both call and put option values. The higher the volatility, the higher probability that the option becomes in-the-money.
+
+5. **risk-free rate** -- influences positively price of call option and negatively price of put option. Result of increasing the risk-free rate is similar to effect of decrease of strike price, as for higher risk-free rate the present value of strike price is lower. 
+
+6. **dividend rate** -- influeces negatively value of call option and positively value of put option. Dividend payoffs decreases value of the underlying instrument, hence the effect is similar when the current price of underlying instruments declines. 
+
+# Black-Scholes-Merton (BSM) Model
+
+The most popular model for pricing options for underlying instruments not paying dividend has been proposed in 70's by Fischer Black and Myron Scholes, and modified by Robert Merton. 
+
+Assumptions of the model are following:
+
+* prices of the underlying instrument follow the log-normal distribution
+* distribution parameters $\mu$ and $\sigma$ are constant,
+* no transaction costs and no taxes,
+* it is possible to purchase or sell any amount of stock or options or their fractions at any given time
+* underlying instrument does not pay dividend 
+* risk-free arbitrage is not possible 
+* trading is continuous
+* traders can borrow and invest their capital at the risk-free interest rate
+* risk-free interest rate $r$ is constant 
+
+
+
+# Black-Scholes-Merton (BSM) Model
+
+Closed-form formula for prices of European call and put option for stocks paying no dividend:
+\begin{tabular}{rl}\\
+CALL:		& $BSC=SN(d_1)-Xe^{-rT}N(d_2)$\\
+PUT:		& $BSP=-SN(-d_1)+Xe^{-rT}N(-d_2)$\\
+\end{tabular}
+where:
+\begin{tabular}{rl}\\
+$S$		& -- price of stocks at the moment of writing\\
+$X$		& -- strike price\\
+$r$		& -- risk-free reate\\
+$T$		& -- time to maturity\\
+$\sigma$	& -- volatility of underlying prices\\
+$N(\cdot)$	& -- cumulative distribution function of $N(0,1)$
+\end{tabular}
+  $$d_1=\frac{\ln(\frac{S}{X})+(r+\frac{\sigma^2}{2})T}{\sigma\sqrt{T}} \hspace{2cm} d_2=\frac{\ln(\frac{S}{X})+(r-\frac{\sigma^2}{2})T}{\sigma\sqrt{T}}=d_1-\sigma\sqrt{T}$$
+
+
+# Black-Scholes-Merton (BSM) Model
+
+Prices of European call and put options for stocks which pay dividend at the continuous $g$ rate:
+  \begin{tabular}{rl}\\
+CALL:	&	 $\mathit{BSC}=Se^{-gT}N(d_1)-Xe^{-rT}N(d_2)$\\
+PUT:		&	 $\mathit{BSP}=-Se^{-gT}N(-d_1)+Xe^{-rT}N(-d_2)$\\
+\end{tabular}
+where:
+  $$d_1=\frac{\ln(\frac{S}{X})+(r-g)T}{\sigma\sqrt{T}}+\frac{\sigma\sqrt{T}}{2}$$ 
+  $$d_2=\frac{\ln(\frac{S}{X})+(r-g)T}{\sigma\sqrt{T}}-\frac{\sigma\sqrt{T}}{2}=d_1-\sigma\sqrt{T}$$
+
+
+
+# Stock price motion in Monte Carlo methods
+
+Price of the underlying asset is described by:
+\begin{equation}
+dS_t=\mu S_tdt+\sigma S_t dW_t
+\end{equation}
+and a continuously compounding risk-free rate $r$. 
+
+From the BS we know that the price of a vanilla option, with expiry $T$
+and pay-off $f$, is equal to
+\begin{equation}
+e^{-rT}\mathbb{E}(f(S_T))
+\end{equation}
+where the expectation is calculated with respect to the risk-neutral process
+\begin{equation}
+\label{eq:ds}
+dS_t = rS_tdt + \sigma S_tdW_t
+\end{equation}
+
+# Stock price motion in Monte Carlo methods
+
+By passing to the log and using Ito's lemma we can solve Eq. (\ref{eq:ds}) 
+\begin{equation}
+d \log S_t = \biggl(r - \frac{1}{2}\sigma^2\biggl) dt + \sigma dW_t
+\end{equation}
+which has the solution
+\begin{equation}
+\log S_t = \log S_0 + \biggl(r - \frac{1}{2}\sigma^2\biggl) t + \sigma W_t
+\end{equation}
+
+# Stock price motion in Monte Carlo methods
+
+Since $W_t$ is a Brownian motion, $W_T$ is distributed as $N(0,T)$ and we can write
+\begin{equation}
+W_T = \sqrt{T} N(0,1)
+\end{equation}
+which results in
+\begin{equation}
+\log S_T = \log S_0 + \Big(r - \frac{1}{2}\sigma^2\Big) T + \sigma\sqrt{T} N(0,1)
+\end{equation}
+or equivalently
+\begin{equation}
+S_T = S_0e^{(r - \frac{1}{2}\sigma^2)T + \sigma\sqrt{T} N(0,1)}
+\end{equation}
+The price of a vanilla option is therefore given by
+\begin{equation}
+e^{-rT}\mathbb{E}\big(f(S_0e^{(r - \frac{1}{2}\sigma^2)T + \sigma\sqrt{T} N(0,1)})\big)
+\end{equation}
+
+# Stock price motion in Monte Carlo methods
+This expectation is approximated by Monte Carlo simulation. 
+
+From the law of large numbers we know that if $Y_j$ are a sequence of identically distributed independent random variables, then with probability 1 the sequence
+\begin{equation}
+\frac{1}{N}\sum_{j=1}^NY_j
+\end{equation}
+converges to $\mathbb{E}(Y)$.
+
+# The algorithm of Monte Carlo method
+\begin{enumerate}
+\item Draw a random variable $x \sim N(0,1)$ and compute
+\begin{equation}
+f(S_0e^{(r - \frac{1}{2}\sigma^2)T + \sigma\sqrt{T}x})
+\end{equation}
+where for European call $f (S) = (S - K)_{+}$. 
+\item Repeat this possibly many times and calculate the average. 
+\item Multiply this average by $e^{-rT}$.
+\end{enumerate} 
+
+# Monte Carlo simulations
+
+```{r, eval = F}
+set.seed(123)
+data.frame(
+  x = 1:1000,
+  y1 = exp(cumsum(rnorm(1000, 0 , 0.02))),
+  y2 = exp(cumsum(rnorm(1000, 0 , 0.02))),
+  # ... some code removed here ...
+  y10 = exp(cumsum(rnorm(1000, 0 , 0.02)))
+) %>%
+  gather(key = "variable", value = "value", -x) %>%
+  ggplot(aes(x = x, y = value)) + 
+  geom_line(size = 0.25, aes(col = variable)) +
+  theme_minimal() +
+  labs(title = "simulated paths of underlying prices", 
+       y = "price", x = "intervals (time)", 
+       caption = "Source: own calculations") +
+  geom_hline(yintercept = 0, linetype = "solid", 
+             color = "black", size = 0.1) 
+```
+
+
+# Monte Carlo simulations
+
+```{r, eval = T, echo = F}
+set.seed(123)
+data.frame(
+  x = 1:1000,
+  y1 = exp(cumsum(rnorm(1000, 0 , 0.02))),
+  y2 = exp(cumsum(rnorm(1000, 0 , 0.02))),
+  y3 = exp(cumsum(rnorm(1000, 0 , 0.02))),
+  y4 = exp(cumsum(rnorm(1000, 0 , 0.02))),
+  y5 = exp(cumsum(rnorm(1000, 0 , 0.02))),
+  y6 = exp(cumsum(rnorm(1000, 0 , 0.02))),
+  y7 = exp(cumsum(rnorm(1000, 0 , 0.02))),
+  y8 = exp(cumsum(rnorm(1000, 0 , 0.02))),
+  y9 = exp(cumsum(rnorm(1000, 0 , 0.02))),
+  y10 = exp(cumsum(rnorm(1000, 0 , 0.02)))
+) %>%
+  gather(key = "variable", value = "value", -x) %>%
+  ggplot(aes(x = x, y = value)) + 
+  geom_line(size = 0.25, aes(col = variable)) +
+  theme_minimal() +
+  labs(title = "simulated paths of underlying prices", 
+       y = "price", x = "intervals (time)", 
+       caption = "Source: own calculations") +
+  geom_hline(yintercept = 0, linetype = "solid", color = "black", size = 0.1) 
+```
+
+
+# Accuracy of results in the MC experiments
+
+* When estimating the result using MC methods we usually calculate the average value of possibly many single results.
+
+* The error of such approximation depends on both:
+    1. the number of simulations and
+    2. standard error of results in a single MC simulation.
+
+* The problem of accuracy of results is strictly linked with Central Limit Theorem.
+
+ 
+# Central Limit Theorem
+
+* Central Limit Theorem states that if $X_i$ are identically and independently distributed random variables with constant expected values $\mu$ and constant and finite variances $\sigma^2$ then a random variable defined as:
+\begin{equation}
+\frac{\sum_{i=1}^{n}X_i-n\mu}{\sigma\sqrt{n}} \nonumber
+\end{equation}
+converges in distribution to standard normal distribution for $n \rightarrow \infty$.
+
+* In other words, we can say that the mean from $n$-elements sample has a normal distribution:
+
+\begin{equation}
+\bar{X}_n \sim N(\mu,\frac{\sigma}{\sqrt{n}}) \nonumber
+\end{equation}
+
+
+# Central Limit Theorem
+
+* As a result, we can find $(1-\alpha)$\% confidence limits for the mean $\bar{X}_n$:
+\begin{equation}
+\Bigg [\bar{X}_n - z_{\alpha/2}\frac{\sigma}{\sqrt{n}}, \bar{X}_n + z_{1-\alpha/2}\frac{\sigma}{\sqrt{n}} \Bigg ] \nonumber
+\end{equation}
+where:
+
+    * $n$ is the number of simulations in Monte Carlo experiment, 
+    * $\sigma$ is standard deviation of the result in a single MC simulation,
+    * $z_{\alpha/2}$ is a $(\alpha/2)$\% quantile of $N(0,1)$.
+    * $z_{1-\alpha/2}$ is a $(1-\alpha/2)$\% quantile of $N(0,1)$.
+
+ 
+    
+ 
+# Increasing number of simulations
+
+* The easiest way to raise accuracy of MC results is to increase the number of simulations $n$.
+* However, this approach is not efficient since reduction of results error is proportional to $1/\sqrt{n}$ rather than $1/n$.
+* Consequently, this requires relatively high number of simulations which can result in unacceptable long duration time of the MC experiment.
+* An alternative solution is to reduce standard deviation  $\sigma$ of the result in the single MC simulation.
+
+
+# Variance reduction techniques
+\begin{itemize}
+\item There are many ways to reduce variance of MC results:
+ \begin{enumerate}
+	\item \textbf{antithetic variates}
+	\item control variates
+	\item stratified sampling
+	\item moment-matching
+	\item low-discrepancy sequencing, quasi-random sequences
+	\item importance sampling
+	\item random number re-usage across experiments
+ \end{enumerate}
+\item One of the most popular is \textbf{antithetic variates} method.
+\end{itemize}
+
+ 
+ 
+# Antithetic variates
+
+* Assume, that the result of a single MC simulation is calculated as the average from some two MC simulations. Therefore, we can write:
+\begin{equation}
+\bar Y = \frac{Y_1+Y_2}{2} \nonumber
+\end{equation}
+and
+\begin{equation}
+var(\bar Y) = \frac{var(Y_1)+var(Y_2)+2cov(Y_1,Y_2)}{4} \nonumber
+\end{equation}
+
+* If $Y_1$ and $Y_2$ are independent from each other then: 
+\begin{equation}
+var(\bar Y)=\frac{var(Y_1)}{2}=\frac{var(Y_2)}{2} \nonumber
+\end{equation}
+
+# Antithetic variates
+
+* However, $var(\bar Y)$ can be additionally reduced if 
+\begin{equation}
+cov(Y_1,Y_2)<0 \nonumber \nonumber
+\end{equation}
+
+* The solution is to apply antithetic variates:
+\begin{eqnarray}
+X_i \sim N(0,1) &\longrightarrow& \textrm{--} X_i \sim N(0,1) \nonumber\\
+Z_i \sim U(0,1) &\longrightarrow& \textrm{1 -- } Z_i \sim U(0,1) \nonumber
+\end{eqnarray}
+
+* Hence, we can easily double the sample size and additionally reduce variance of results due to to negative covariance between the results from two simultaneous simulations.
+
+
+# Recommended readings -- options
+
+John C. Hull, *Options, Futures, and Other Derivatives*
+
+\includegraphics[height=0.6\textheight]{img/hull.jpg}
+
+
+# Recommended readings -- C++ #1
+
+Stephen Prata, *C++ Primer Plus (6th Edition)*
+
+\includegraphics[height=0.6\textheight]{img/prata.jpg}
+
+
+
+# Recommended readings -- C++ #2
+
+Bjarne Stroustrup, *The C++ Programming Language*
+
+\includegraphics[height=0.6\textheight]{img/stroustrup.jpg}
+
+
+
+# Recommended readings -- Rcpp #1
+
+Dirk Eddelbuettel, *Seamless R and C++ Integration with Rcpp* 
+
+\includegraphics[height=0.6\textheight]{img/seamless.jpg}
+
+* comprehensive introduction to Rcpp 
+* with very few lines of C++ code, we have R's data structures readily at hand for further computations in C++ 
+
+
+# Recommended readings -- Rcpp #2
+
+* http://www.rcpp.org/
+* https://cran.r-project.org/web/packages/Rcpp/index.html
+* http://dirk.eddelbuettel.com/code/rcpp/Rcpp-quickref.pdf
+* https://teuder.github.io/rcpp4everyone_en/
+* http://dirk.eddelbuettel.com/papers/rcpp_ku_nov2013-part1.pdf
+* http://dirk.eddelbuettel.com/papers/rcpp_ku_nov2013-part2.pdf
+* http://dirk.eddelbuettel.com/papers/rcpp_ku_nov2013-part3.pdf
+* https://support.rstudio.com/hc/en-us/articles/200486088-Using-Rcpp-with-RStudio
+* http://dirk.eddelbuettel.com/code/rcpp.html
+* https://blog.revolutionanalytics.com/2012/11/hadleys-guide-to-high-performance-r-with-rcpp.html
+* http://adv-r.had.co.nz/Rcpp.html
+
+
+# Recommended readings -- Rcpp #3
+
+\begin{itemize}
+\item Tutorial: C++ and Rcpp for beginners\\
+Romain Francois and Hadley Wickham, Rice University \\
+\url{http://www.edii.uclm.es/~useR-2013/Tutorials/Francois.html}
+\item \url{http://www.rinfinance.com/agenda/2014/workshop/DirkEddelbuettel.pdf}
+\item \url{http://dirk.eddelbuettel.com/papers/uofc_cs_apr2013.pdf}
+\item \url{http://people.math.aau.dk/~sorenh/teaching/2014-Rcpp/misc/Rcpp-workshop.pdf}
+\item \url{http://dirk.eddelbuettel.com/papers/rcpp_sydney-rug_jul2013.pdf}
+\item \url{http://gallery.rcpp.org/}
+\item \url{http://www.rinfinance.com/agenda/2013/workshop/DirkEddelbuettel.pdf}
+\end{itemize}
+
+
+# Recommended readings -- Rcpp #4
+\begin{itemize}
+\item \url{http://dirk.eddelbuettel.com/code/rcpp.html}
+\item \url{http://dirk.eddelbuettel.com/papers/rcpp_workshop_introduction_user2012.pdf}
+\item \url{http://dirk.eddelbuettel.com/papers/rcpp_workshop_advanced_user2012.pdf}
+\item \url{http://www.rcpp.org/}
+\item \url{http://www.youtube.com/watch?v=UZkaZhsOfT4}
+
+\item \url{http://blog.rstudio.org/2012/11/29/rstudio-and-rcpp/}
+\item \url{https://github.com/hadley/devtools/wiki/Rcpp}
+
+\item \url{http://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-quickref.pdf}
+\item \url{http://cran.rstudio.com/web/packages/Rcpp/vignettes/Rcpp-attributes.pdf} 
+\end{itemize}
+
+
+
