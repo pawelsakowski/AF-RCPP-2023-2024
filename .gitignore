@@ -37,3 +37,12 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+# additional entries
+slides/*.md
+*.tar.gz
+*.zip
+slides/*_cache
+slides/*_files
+README.html
+
