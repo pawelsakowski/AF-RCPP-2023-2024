@@ -90,10 +90,10 @@ Repeat these actions for any other function you would like to include in the pac
 
 This will create `zip` and/or `tar.gz` files with your package. By default, they will be located next to the folder with the package.
 
-6. This zipped file could be then installed with:
+6. This archive file (`*.zip` or `*.tar.gz`) could be then installed with:
 
 * `install.packages("binary-package-filename.zip", type = "binaries", repos = NULL)`
-* `install.packages("source-package-filename.zip", type = "source", repos = NULL)`
+* `install.packages("source-package-filename.tar.gz", type = "source", repos = NULL)`
 
 See `scripts/optionPricer2Application.R` to examine the example.
 
@@ -107,3 +107,10 @@ See `scripts/optionPricer2Application.R` to examine the example.
 * All codes from the lectures and labs can be used in the solutions.
 * A short report will be required.
 * Solutions in a form of a private Github/GitLab/Bitbucket repository will get premium points!
+
+## Happy learning! :-)
+
+* If you need any sort of help, feel free to message me. 
+* Do not be afraid to ask question! Asking question is super important to your growth!
+* No question is a stupid question!
+* I'm available on pawelsakowski@gmail.com
