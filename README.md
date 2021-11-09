@@ -1,6 +1,6 @@
-# AF-RCPP-2020-2021
+# AF-RCPP-2021-2022
 
-This repository contains materials to the "Applied Finance" course at the University of Warsaw, Faculty of Economic Sciences in academic year 2020/2021. Materials refer to the part "Path dependent option pricing with Monte Carlo simulations and Rcpp package".
+This repository contains materials to the "Applied Finance" course at the University of Warsaw, Faculty of Economic Sciences in academic year 2021/2022. Materials refer to the part "Path dependent option pricing with Monte Carlo simulations and Rcpp package".
 
 The aim of this short course is to provide techniques of incorporating `c++` code into `R` environment. Three techniques will be discussed:
 

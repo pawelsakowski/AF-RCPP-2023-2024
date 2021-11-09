@@ -3,7 +3,7 @@ title: "Applied Finance"
 subtitle: "Path-dependent option pricing with Monte Carlo and the `Rcpp` package "
 author: "Paweł Sakowski"
 date: |
- | academic year 2020/2021
+ | academic year 2021/2022
  | ![](img/logo.png)
 fontsize: 10pt
 output: 
@@ -31,7 +31,7 @@ library(tidyverse)
 
 # Options
 
-In finance, an **option** is an agreement, which gives the holder a right for **buy** or **sell** a certaing underlying instrument for a given price (*exercise price*) at a given moment in futures (*expiry date*).
+In finance, an **option** is an agreement, which gives the holder a right for **buy** or **sell** a certain underlying instrument for a given price (*exercise price*) at a given moment in futures (*expiry date*).
 
 # Underlying instruments
 
