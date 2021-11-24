@@ -49,5 +49,6 @@ packages/*.zip
 packages/*.tar.gz
 packages/*/src/*.o
 packages/*/src/*.so
-
+progs/prog1/main
+progs/prog2/main
 

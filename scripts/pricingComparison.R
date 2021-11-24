@@ -250,19 +250,19 @@ pricesData <-
       prices = prices2,
       group  = "prices2"
     )
-  )%>%
+  ) %>%
   bind_rows(
     tibble(
       prices = prices2a,
       group  = "prices2a"
     )
-  )%>%
+  ) %>%
   bind_rows(
     tibble(
       prices = prices3,
       group  = "prices3"
     )
-  )%>%
+  ) %>%
   bind_rows(
     tibble(
       prices = prices4,
