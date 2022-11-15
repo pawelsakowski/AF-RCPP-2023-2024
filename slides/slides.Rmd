@@ -3,7 +3,7 @@ title: "Applied Finance"
 subtitle: "Path-dependent option pricing with Monte Carlo and the `Rcpp` package "
 author: "Paweł Sakowski"
 date: |
- | academic year 2021/2022
+ | academic year 2022/2023
  | ![](img/logo.png)
 fontsize: 10pt
 output: 
@@ -20,6 +20,13 @@ output:
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
 ```
+
+```{r eval = F, echo = F}
+# to install fOptions packages, please use:
+# install.packages("http://cran.nexr.com/src/contrib/Archive/fOptions/fOptions_3022.85.tar.gz",
+#                  repos = NULL)
+```
+
 
 ```{r, echo = F, warning=F, message=FALSE}
 library(knitr)
@@ -481,7 +488,7 @@ converges in distribution to standard normal distribution for $n \rightarrow \in
 * In other words, we can say that the mean from $n$-elements sample has a normal distribution:
 
 \begin{equation}
-\bar{X}_n \sim N(\mu,\frac{\sigma}{\sqrt{n}}) \nonumber
+\bar{X}_n \sim N\Big(\mu,\frac{\sigma}{\sqrt{n}}\Big) \nonumber
 \end{equation}
 
 
@@ -595,46 +602,45 @@ Dirk Eddelbuettel, *Seamless R and C++ Integration with Rcpp*
 
 * http://www.rcpp.org/
 * https://cran.r-project.org/web/packages/Rcpp/index.html
-* http://dirk.eddelbuettel.com/code/rcpp/Rcpp-quickref.pdf
 * https://teuder.github.io/rcpp4everyone_en/
-* http://dirk.eddelbuettel.com/papers/rcpp_ku_nov2013-part1.pdf
-* http://dirk.eddelbuettel.com/papers/rcpp_ku_nov2013-part2.pdf
-* http://dirk.eddelbuettel.com/papers/rcpp_ku_nov2013-part3.pdf
-* https://support.rstudio.com/hc/en-us/articles/200486088-Using-Rcpp-with-RStudio
-* http://dirk.eddelbuettel.com/code/rcpp.html
-* https://blog.revolutionanalytics.com/2012/11/hadleys-guide-to-high-performance-r-with-rcpp.html
 * http://adv-r.had.co.nz/Rcpp.html
+* http://gallery.rcpp.org/
+* https://support.rstudio.com/hc/en-us/articles/200486088-Using-Rcpp-with-RStudio
+* https://blog.revolutionanalytics.com/2012/11/hadleys-guide-to-high-performance-r-with-rcpp.html
 
 
 # Recommended readings -- Rcpp #3
+<!--
+* Tutorial: C++ and Rcpp for beginners
+Romain Francois and Hadley Wickham, Rice University
+http://www.edii.uclm.es/~useR-2013/Tutorials/Francois.html
+* http://www.rinfinance.com/agenda/2014/workshop/DirkEddelbuettel.pdf
+* http://people.math.aau.dk/~sorenh/teaching/2014-Rcpp/misc/Rcpp-workshop.pdf
+* http://www.rinfinance.com/agenda/2013/workshop/DirkEddelbuettel.pdf
+-->
 
-\begin{itemize}
-\item Tutorial: C++ and Rcpp for beginners\\
-Romain Francois and Hadley Wickham, Rice University \\
-\url{http://www.edii.uclm.es/~useR-2013/Tutorials/Francois.html}
-\item \url{http://www.rinfinance.com/agenda/2014/workshop/DirkEddelbuettel.pdf}
-\item \url{http://dirk.eddelbuettel.com/papers/uofc_cs_apr2013.pdf}
-\item \url{http://people.math.aau.dk/~sorenh/teaching/2014-Rcpp/misc/Rcpp-workshop.pdf}
-\item \url{http://dirk.eddelbuettel.com/papers/rcpp_sydney-rug_jul2013.pdf}
-\item \url{http://gallery.rcpp.org/}
-\item \url{http://www.rinfinance.com/agenda/2013/workshop/DirkEddelbuettel.pdf}
-\end{itemize}
-
+* http://dirk.eddelbuettel.com/code/rcpp.html
+* http://dirk.eddelbuettel.com/code/rcpp/Rcpp-quickref.pdf
+* http://dirk.eddelbuettel.com/papers/rcpp_ku_nov2013-part1.pdf
+* http://dirk.eddelbuettel.com/papers/rcpp_ku_nov2013-part2.pdf
+* http://dirk.eddelbuettel.com/papers/rcpp_ku_nov2013-part3.pdf
+* http://dirk.eddelbuettel.com/papers/uofc_cs_apr2013.pdf
+* http://dirk.eddelbuettel.com/papers/rcpp_sydney-rug_jul2013.pdf
+* http://dirk.eddelbuettel.com/papers/rcpp_workshop_introduction_user2012.pdf
+* http://dirk.eddelbuettel.com/papers/rcpp_workshop_advanced_user2012.pdf
 
 # Recommended readings -- Rcpp #4
-\begin{itemize}
-\item \url{http://dirk.eddelbuettel.com/code/rcpp.html}
-\item \url{http://dirk.eddelbuettel.com/papers/rcpp_workshop_introduction_user2012.pdf}
-\item \url{http://dirk.eddelbuettel.com/papers/rcpp_workshop_advanced_user2012.pdf}
-\item \url{http://www.rcpp.org/}
-\item \url{http://www.youtube.com/watch?v=UZkaZhsOfT4}
 
-\item \url{http://blog.rstudio.org/2012/11/29/rstudio-and-rcpp/}
-\item \url{https://github.com/hadley/devtools/wiki/Rcpp}
 
-\item \url{http://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-quickref.pdf}
-\item \url{http://cran.rstudio.com/web/packages/Rcpp/vignettes/Rcpp-attributes.pdf} 
-\end{itemize}
+* http://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-quickref.pdf
+* http://cran.rstudio.com/web/packages/Rcpp/vignettes/Rcpp-attributes.pdf
+* Integrating R with C++: Rcpp, RInside, and RProtobuf: http://www.youtube.com/watch?v=UZkaZhsOfT4
+* http://blog.rstudio.org/2012/11/29/rstudio-and-rcpp/
+* https://github.com/hadley/devtools/wiki/Rcpp
+
+
+
+
 
 
 
