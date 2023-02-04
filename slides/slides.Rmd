@@ -85,7 +85,7 @@ się;
 
 * Option is a contract where there are to participants: 
     * **Holder** of the option, who poseses the right to exercise the call/put option. Hence he can buy/sell the underlying instrument for the given strike price at a given moment in future. Holder takes long position in option contract.
-    * **Writer** of the option, who poseses the obligation to exercise the call/put option. Hence for call option he has to sell the underlying instrument, and for put option he has to buy underlying instrument (for the given strike price at a given moment in future). Holder takes short position in option contract.
+    * **Writer** of the option, who poseses the obligation to exercise the call/put option. Hence for call option he has to sell the underlying instrument, and for put option he has to buy underlying instrument (for the given strike price at a given moment in future). Writer takes short position in option contract.
     
 
 # Four basic payoff profiles
