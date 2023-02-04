@@ -44,16 +44,15 @@ In finance, an **option** is an agreement, which gives the holder a right for **
 
 * **commodity options** -- the underlying instrument is various commodities:
     * precious metals (gold, silver, platinum),
-    * industrial commodities (cupper, steel)
+    * industrial commodities (copper, steel)
     * agricultural commodities (wheat, corn, livestock),
 
 * **financial options** -- the underlying is a financial instrument
     * equity options (stock options) -- stocks of companies quoted on stock exchange,
     * index options -- written on equity indices,
     * currency options -- underlying is currency (exchange rate)
-    * interest rate options -- inderlying is a security: bond, bill,     
+    * interest rate options -- underlying is a security: bond, bill,     
     * futures options -- underlying is a futures contract written on other index/security/currency/commodity
-
 
 # Types of options
 
@@ -63,17 +62,15 @@ We can distinguish two basic option types:
 
 * **PUT** option -- gives the holder right to **sell** a given amount of underlying instrument for a given price at the given moment in future
 
-
 # Option characteristics 
 
 * **exercise price** (**strike price**) -- price at which option is exercised, it is determined at the moment of option writing and remains constant
-się;
 
 * **option price** (**option premium**) -- price of the right which is acquired by the option holder (buyer), it is a market value of the option which is time varying
 
 * **underlying price** -- market value of the underlying instrument for which option is written
 
-* **time to maturity** (**time to expiration**, **expiry**) --  time after which option cannond be exercised and becomes void. 
+* **time to maturity** (**time to expiration**, **expiry**) --  time after which option cannot be exercised and becomes void. 
 
 * **exercise dat**e – moment in time (or interval) when option can be exercised. We can distinguish two types: **American option** and **European option**. Holder of an American option can exercise it at any moment until exercise date. Holder of an European option can exercise only at exercise date.
 
@@ -84,10 +81,9 @@ się;
 * When holder wants to make use of that right, it means that the option is exercised (executed). 
 
 * Option is a contract where there are to participants: 
-    * **Holder** of the option, who poseses the right to exercise the call/put option. Hence he can buy/sell the underlying instrument for the given strike price at a given moment in future. Holder takes long position in option contract.
-    * **Writer** of the option, who poseses the obligation to exercise the call/put option. Hence for call option he has to sell the underlying instrument, and for put option he has to buy underlying instrument (for the given strike price at a given moment in future). Writer takes short position in option contract.
+    * **Holder** of the option, who posses the right to exercise the call/put option. Hence he can buy/sell the underlying instrument for the given strike price at a given moment in future. Holder takes long position in option contract.
+    * **Writer** of the option, who posses the obligation to exercise the call/put option. Hence for call option he has to sell the underlying instrument, and for put option he has to buy underlying instrument (for the given strike price at a given moment in future). Writer takes short position in option contract.
     
-
 # Four basic payoff profiles
 
 * Hence, we can distinguish four basic positions in option contracts:
@@ -103,7 +99,6 @@ się;
 
 * Holder of the put option will make use of that right if the current market price of underlying instrument $(S)$ is less than the strike price $(X)$. 
 
-
 # Four basic payoff profiles
 
 To illustrate the payoff profiles, we take (arbitrarily) following assumptions:
@@ -112,7 +107,7 @@ To illustrate the payoff profiles, we take (arbitrarily) following assumptions:
 X     <- 110  # strike price
 Time  <- 0.5  # time to maturity
 r     <- 0.06 # risk-free rate
-q     <- 0    # divident rate
+q     <- 0    # dividend rate
 sigma <- 0.2  # volatility
 b     <- r - q
 ```
@@ -174,7 +169,6 @@ data.frame(x = S, y = longCallPayoffs - price) %>%
              color = "black", size = 0.25) 
 ```
 
-
 # Short Call 
 
 ```{r, echo = F, warning=F}
@@ -195,7 +189,6 @@ data.frame(x = S, y = price - longCallPayoffs) %>%
   geom_hline(yintercept = 0, linetype = "solid", 
              color = "black", size = 0.25) 
 ```
-
 
 # Long Put 
 
@@ -220,7 +213,6 @@ data.frame(x = S, y = longPutPayoffs - price) %>%
              color = "black", size = 0.25) 
 ```
 
-
 # Short Put 
 
 ```{r, echo = F, warning=F}
@@ -242,8 +234,6 @@ data.frame(x = S, y = price - longPutPayoffs) %>%
              color = "black", size = 0.25) 
 ```
 
-
-
 # Exercising the option contract
 
 There could be three scenarios when taking decision whether to exercise the option or not:
@@ -253,7 +243,6 @@ There could be three scenarios when taking decision whether to exercise the opti
 * option is **out-of-the-money**, if it is worth exercising it. For a call option it means that $S < K$, while for a put option $S > K$
 
 * option is **at-the-money**, if the strike price is equal to current market price of underlying: $S = K$ 
-
 
 # Value of the option
 
@@ -267,14 +256,13 @@ Hence, we can write:
 
 * value of the option = intrinsic value + time value 
 
-
 # Properties of option contract
 
 For a call option:
 
 * Option value is non-negative, as the option itself is a right, rather than obligation. The holder of the option will make use of that right only if it makes profit for him.
 
-* Option value cannot be lower than its intrinsic value -- otherwise risk-free arbitrage could be posible.
+* Option value cannot be lower than its intrinsic value -- otherwise risk-free arbitrage could be possible.
 
 * Option value is at least equal to (absolute) difference between its strike price and current price of underlying instrument.
 
@@ -282,7 +270,7 @@ For a call option:
 
 # Factors influencing option premium #1
 
-1. **strike price** -- influences negetively call option value, positively put option value.
+1. **strike price** -- influences negatively call option value, positively put option value.
 
 2. **underlying price** -- its increase results in higher value of call option and lower value of put option, while its decrease results in lower value of call option and higher value of put option.
 
@@ -294,7 +282,7 @@ For a call option:
 
 5. **risk-free rate** -- influences positively price of call option and negatively price of put option. Result of increasing the risk-free rate is similar to effect of decrease of strike price, as for higher risk-free rate the present value of strike price is lower. 
 
-6. **dividend rate** -- influeces negatively value of call option and positively value of put option. Dividend payoffs decreases value of the underlying instrument, hence the effect is similar when the current price of underlying instruments declines. 
+6. **dividend rate** -- influences negatively value of call option and positively value of put option. Dividend payoffs decreases value of the underlying instrument, hence the effect is similar when the current price of underlying instruments declines. 
 
 # Black-Scholes-Merton (BSM) Model
 
@@ -312,8 +300,6 @@ Assumptions of the model are following:
 * traders can borrow and invest their capital at the risk-free interest rate
 * risk-free interest rate $r$ is constant 
 
-
-
 # Black-Scholes-Merton (BSM) Model
 
 Closed-form formula for prices of European call and put option for stocks paying no dividend:
@@ -325,13 +311,12 @@ where:
 \begin{tabular}{rl}\\
 $S$		& -- price of stocks at the moment of writing\\
 $X$		& -- strike price\\
-$r$		& -- risk-free reate\\
+$r$		& -- risk-free rate\\
 $T$		& -- time to maturity\\
 $\sigma$	& -- volatility of underlying prices\\
 $N(\cdot)$	& -- cumulative distribution function of $N(0,1)$
 \end{tabular}
   $$d_1=\frac{\ln(\frac{S}{X})+(r+\frac{\sigma^2}{2})T}{\sigma\sqrt{T}} \hspace{2cm} d_2=\frac{\ln(\frac{S}{X})+(r-\frac{\sigma^2}{2})T}{\sigma\sqrt{T}}=d_1-\sigma\sqrt{T}$$
-
 
 # Black-Scholes-Merton (BSM) Model
 
@@ -343,8 +328,6 @@ PUT:		&	 $\mathit{BSP}=-Se^{-gT}N(-d_1)+Xe^{-rT}N(-d_2)$\\
 where:
   $$d_1=\frac{\ln(\frac{S}{X})+(r-g)T}{\sigma\sqrt{T}}+\frac{\sigma\sqrt{T}}{2}$$ 
   $$d_2=\frac{\ln(\frac{S}{X})+(r-g)T}{\sigma\sqrt{T}}-\frac{\sigma\sqrt{T}}{2}=d_1-\sigma\sqrt{T}$$
-
-
 
 # Stock price motion in Monte Carlo methods
 
@@ -437,7 +420,6 @@ data.frame(
              color = "black", size = 0.1) 
 ```
 
-
 # Monte Carlo simulations
 
 ```{r, eval = T, echo = F}
@@ -465,7 +447,6 @@ data.frame(
   geom_hline(yintercept = 0, linetype = "solid", color = "black", size = 0.1) 
 ```
 
-
 # Accuracy of results in the MC experiments
 
 * When estimating the result using MC methods we usually calculate the average value of possibly many single results.
@@ -476,7 +457,6 @@ data.frame(
 
 * The problem of accuracy of results is strictly linked with Central Limit Theorem.
 
- 
 # Central Limit Theorem
 
 * Central Limit Theorem states that if $X_i$ are identically and independently distributed random variables with constant expected values $\mu$ and constant and finite variances $\sigma^2$ then a random variable defined as:
@@ -491,7 +471,6 @@ converges in distribution to standard normal distribution for $n \rightarrow \in
 \bar{X}_n \sim N\Big(\mu,\frac{\sigma}{\sqrt{n}}\Big) \nonumber
 \end{equation}
 
-
 # Central Limit Theorem
 
 * As a result, we can find $(1-\alpha)$\% confidence limits for the mean $\bar{X}_n$:
@@ -505,16 +484,12 @@ where:
     * $z_{\alpha/2}$ is a $(\alpha/2)$\% quantile of $N(0,1)$.
     * $z_{1-\alpha/2}$ is a $(1-\alpha/2)$\% quantile of $N(0,1)$.
 
- 
-    
- 
 # Increasing number of simulations
 
 * The easiest way to raise accuracy of MC results is to increase the number of simulations $n$.
 * However, this approach is not efficient since reduction of results error is proportional to $1/\sqrt{n}$ rather than $1/n$.
 * Consequently, this requires relatively high number of simulations which can result in unacceptable long duration time of the MC experiment.
 * An alternative solution is to reduce standard deviation  $\sigma$ of the result in the single MC simulation.
-
 
 # Variance reduction techniques
 \begin{itemize}
@@ -531,8 +506,6 @@ where:
 \item One of the most popular is \textbf{antithetic variates} method.
 \end{itemize}
 
- 
- 
 # Antithetic variates
 
 * Assume, that the result of a single MC simulation is calculated as the average from some two MC simulations. Therefore, we can write:
@@ -564,13 +537,11 @@ Z_i \sim U(0,1) &\longrightarrow& \textrm{1 -- } Z_i \sim U(0,1) \nonumber
 
 * Hence, we can easily double the sample size and additionally reduce variance of results due to to negative covariance between the results from two simultaneous simulations.
 
-
 # Recommended readings -- options
 
 John C. Hull, *Options, Futures, and Other Derivatives*
 
 \includegraphics[height=0.6\textheight]{img/hull.jpg}
-
 
 # Recommended readings -- C++ #1
 
@@ -578,15 +549,11 @@ Stephen Prata, *C++ Primer Plus (6th Edition)*
 
 \includegraphics[height=0.6\textheight]{img/prata.jpg}
 
-
-
 # Recommended readings -- C++ #2
 
 Bjarne Stroustrup, *The C++ Programming Language*
 
 \includegraphics[height=0.6\textheight]{img/stroustrup.jpg}
-
-
 
 # Recommended readings -- Rcpp #1
 
@@ -597,7 +564,6 @@ Dirk Eddelbuettel, *Seamless R and C++ Integration with Rcpp*
 * comprehensive introduction to Rcpp 
 * with very few lines of C++ code, we have R's data structures readily at hand for further computations in C++ 
 
-
 # Recommended readings -- Rcpp #2
 
 * http://www.rcpp.org/
@@ -607,7 +573,6 @@ Dirk Eddelbuettel, *Seamless R and C++ Integration with Rcpp*
 * http://gallery.rcpp.org/
 * https://support.rstudio.com/hc/en-us/articles/200486088-Using-Rcpp-with-RStudio
 * https://blog.revolutionanalytics.com/2012/11/hadleys-guide-to-high-performance-r-with-rcpp.html
-
 
 # Recommended readings -- Rcpp #3
 <!--
@@ -630,7 +595,6 @@ http://www.edii.uclm.es/~useR-2013/Tutorials/Francois.html
 * http://dirk.eddelbuettel.com/papers/rcpp_workshop_advanced_user2012.pdf
 
 # Recommended readings -- Rcpp #4
-
 
 * http://cran.r-project.org/web/packages/Rcpp/vignettes/Rcpp-quickref.pdf
 * http://cran.rstudio.com/web/packages/Rcpp/vignettes/Rcpp-attributes.pdf
