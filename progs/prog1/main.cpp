@@ -32,11 +32,11 @@ int main(){
 	cin >> NumberOfPaths;
 
 	double result = runSimpleMonteCarlo1(Expiry,
-                                         Strike,
-						                 Spot,
-						                 Vol,
-							             r,
-						                 NumberOfPaths);
+                                      Strike,
+                                      Spot,
+                                      Vol,
+                                      r,
+                                      NumberOfPaths);
 
 	cout << "The price of European call is " << result << "\n";
 

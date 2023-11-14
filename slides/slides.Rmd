@@ -1,10 +1,14 @@
 ---
 title: "Applied Finance"
-subtitle: "Path-dependent option pricing with Monte Carlo and the `Rcpp` package "
-author: "Paweł Sakowski"
+subtitle: | 
+    | Path-dependent option pricing with 
+    | Monte Carlo and the `Rcpp` package
+author: | 
+    | Paweł Sakowski
+    | Department of Quantitative Finance
 date: |
- | academic year 2022/2023
- | ![](img/logo.png)
+ | academic year 2023/2024
+ | ![](img/WNE_UW_EN_zwykly.pdf)
 fontsize: 10pt
 output: 
   beamer_presentation:
@@ -15,6 +19,8 @@ output:
     toc: false
     fig_caption: false
     highlight: tango
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include = FALSE}
@@ -31,8 +37,7 @@ knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
 ```{r, echo = F, warning=F, message=FALSE}
 library(knitr)
 library(tidyverse)
-library(fOptions)
-library(tidyverse)
+library(RQuantLib)
 ```
 
 
@@ -114,10 +119,10 @@ b     <- r - q
 
 Price of the European call is:
 ```{r}
-library(fOptions)
-(price <- GBSOption(TypeFlag = "c", S = 110, 
-                    X = X, Time = Time, r = r,
-                    b = b, sigma = sigma)@price)
+library(RQuantLib)
+(price <- EuropeanOption(type = "call", underlying = 110, strike = X,
+                          dividendYield = q, riskFreeRate = r, 
+                          maturity = Time, volatility = sigma)$value)
 ```
 (see next slides for the Black-Scholes formula)
 

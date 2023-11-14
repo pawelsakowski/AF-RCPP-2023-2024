@@ -1,6 +1,6 @@
-# AF-RCPP-2022-2023
+# AF-RCPP-2023-2024
 
-This repository contains materials to the "Applied Finance" course at the University of Warsaw, Faculty of Economic Sciences in academic year 2022/2023. Materials refer to the part "Path dependent option pricing with Monte Carlo simulations and Rcpp package".
+This repository contains materials to the "Applied Finance" course at the University of Warsaw, Faculty of Economic Sciences in academic year 2023/2024. Materials refer to the part "Path dependent option pricing with Monte Carlo simulations and Rcpp package".
 
 The aim of this short course is to provide techniques of incorporating `c++` code into `R` environment. Three techniques will be discussed:
 
@@ -42,7 +42,7 @@ The aim is to compare of efficiency of Monte Carlo European Call option pricing 
 * using loops in C++, via Rcpp
 * using vectors in R with antithetic sampling
 
-We also introduce a simple `c++` application which runs in Command Line (Windows) or terminal (Linux/Mac OS). To compile its source code into executable file you can use one of the popular IDEs ([Microsoft Visual Studio](https://visualstudio.microsoft.com/), [CLion](https://www.jetbrains.com/clion/), [Code Blocks](http://www.codeblocks.org/)), code editors ([VS Code](https://code.visualstudio.com/), [Xcode](https://developer.apple.com/xcode/), [Sublime Text](https://www.sublimetext.com/), [Vim](https://www.vim.org/), and many others) or even simple text editors (just to mention [Notepad++](https://notepad-plus-plus.org/) on Windows).
+We also introduce a simple `c++` application which runs in Command Line (Windows) or terminal (Linux/MacOS). To compile its source code into executable file you can use one of the popular IDEs ([Microsoft Visual Studio](https://visualstudio.microsoft.com/), [CLion](https://www.jetbrains.com/clion/), [Code Blocks](http://www.codeblocks.org/)), code editors ([VS Code](https://code.visualstudio.com/), [Xcode](https://developer.apple.com/xcode/), [Sublime Text](https://www.sublimetext.com/), [Vim](https://www.vim.org/), and many others) or even simple text editors (just to mention [Notepad++](https://notepad-plus-plus.org/) on Windows).
 
 I highly recommend here trying [VS Code](https://code.visualstudio.com/) for this. Below you will useful information how to set up VS Code for work with c++ code using the GCC compiler. Its very simple and shouldn't take your more than 5 minutes!
 
@@ -113,4 +113,4 @@ See `scripts/optionPricer2Application.R` to examine the example.
 * If you need any sort of help, feel free to message me. 
 * Do not be afraid to ask question! Asking question is super important to your growth!
 * No question is a stupid question!
-* I'm available on pawelsakowski@gmail.com
+* I'm available on p.sakowski@uw.edu.pl

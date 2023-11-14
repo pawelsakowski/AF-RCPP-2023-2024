@@ -2,6 +2,6 @@
 #define GETONEGAUSSIANBYBOXMUELLER_H
 
 double getOneGaussianByBoxMueller();
-       
+
 #endif
 
