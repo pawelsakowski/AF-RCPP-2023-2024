@@ -101,7 +101,7 @@ See `scripts/optionPricer2Application.R` to examine the example.
 
 ## Grading Policy
 
-* Each participant will get by 2022-12-10 an assignment with an individual home project.
+* Each participant will get by 2023-12-10 an assignment with an individual home project.
 * The aim of the project will be to apply Monte Carlo techniques to provide an approximation of the path-dependent option.
 * The solution should be delivered in a form of a Rcpp-package, along with a short implementation of the function/functions which are provided by this package.
 * All codes from the lectures and labs can be used in the solutions.
