@@ -110,13 +110,14 @@ tibble(
   geom_point(size = 0.5) +
   coord_fixed(ratio = 1) +
   labs(
-    x = "yield to maturity",
-    y = "price of zero-coupon bond",
+    x = "",
+    y = "",
     title = paste0(N, " points with random cooridnates"),
     subtitle = "x ~ U(0,1), y ~ U(0,1)",
     caption = "source: own calculations", 
     colour = "d < 1"
-  )
+  ) +
+  theme_bw()
 
 
 # 4a. An R function based on loop
